@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Auto Login</title>
+</head>
+<body>
+  <h2>Logging you in...</h2>
+  <div id="status">Please wait...</div>
+
+  <script>
+    (async () => {
+      const token = new URLSearchParams(window.location.search).get('token');
+      const status = document.getElementById('status');
+
+      if (!token) {
+        status.textContent = "❌ No token found.";
+        return;
+      }
+
+      try {
+        const res = await fetch('https://playtimeusa-backend-1.onrender.com/api/cashier/voucher', { ... })
+
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token })
+        });
+
+        const data = await res.json();
+        if (data.error) {
+          status.textContent = "❌ " + data.error;
+        } else {
+          status.textContent = `✅ Logged in as ${data.username}, Balance: $${data.mainBalance}`;
+          localStorage.setItem('player', JSON.stringify(data));
+
+          // Redirect to games.html after 1.5s
+          setTimeout(() => {
+            window.location.href = 'games.html';
+          }, 1500);
+        }
+      } catch (err) {
+        status.textContent = "❌ Server error.";
+      }
+    })();
+  </script>
+</body>
+</html>
+

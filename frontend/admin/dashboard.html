@@ -1,0 +1,5 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Admin</title></head><body>
+<h1>Admin Dashboard</h1><button id="load">Load Financials</button><pre id="out"></pre>
+<script>
+document.getElementById('load').addEventListener('click', async ()=>{ const res = await fetch('/api/admin/financials'); const d = await res.json(); document.getElementById('out').textContent = JSON.stringify(d,null,2); });
+</script></body></html>
